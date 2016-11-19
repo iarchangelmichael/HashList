@@ -127,7 +127,7 @@ public:
 	}
 
 	void UpdateNodes(){
-		if(esz / 2 < nsz)
+		if(esz < nsz)
 			return ;
 
 		unsigned int newsz = !nsz ? 128 : nsz << 1;
