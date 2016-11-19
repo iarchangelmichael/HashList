@@ -10,7 +10,7 @@ std - std::map
 stdu - std::unordered_map
 
 # Options
-CXXFLAGS = [HLSIZE | HLITS] && make
+make HLFLAGS='-DHLSIZE=65535 -DHLITS=16' hl
 HLSIZE - operations.
 HLITS - iterations.
 
