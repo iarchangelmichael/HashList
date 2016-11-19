@@ -9,5 +9,11 @@ hlf - HashListFive
 std - std::map
 stdu - std::unordered_map
 
+# Options
+CXXFLAGS = [HLSIZE | HLITS] && make
+HLSIZE - operations.
+HLITS - iterations.
+
+
 # Run:
 ./hashlist

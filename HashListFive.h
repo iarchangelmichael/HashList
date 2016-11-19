@@ -85,7 +85,7 @@ public:
 			sz = to - f;
 		}
 
-		if(f->crc < crc)
+		if(sz && f->crc < crc)
 			f ++;
 
 		if(f < to && f->crc < crc || f > nodes && f[-1].crc > crc)
@@ -95,7 +95,7 @@ public:
 		HashListEl *nel = elements.AllocNew();
 		nel->SetItem(key, val);
 
-		if(f != nodes + esz)
+		if(f != (nodes + esz))
 			memcpy(f + 1, f, (esz - (f - nodes)) * sizeof(HashListNode));
 		
 		f->el = nel;

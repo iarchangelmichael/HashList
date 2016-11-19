@@ -2,10 +2,10 @@ CC=gcc
 CXX=g++
 RM=rm -f
 SOURCE=HashList.cpp
-CXXFLAGS= -std=c++11
+CXXFLAGS= ${HLFLAGS} -std=c++11
 
 all:
-echo "Use: make [hl | hlf | std | stdu]"
+	echo "Use: make [hl | hlf | std | stdu]"
 
 hl: CXXFLAGS+= -DHLTYPE=1
 hl: build
