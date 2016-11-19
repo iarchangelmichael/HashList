@@ -6,6 +6,7 @@ make type
 
 hl - HashList
 hlf - HashListFive
+hls - HashListSix
 ht - HashTree
 std - std::map
 stdu - std::unordered_map
@@ -18,3 +19,11 @@ HLITS - iterations.
 
 # Run:
 ./hashlist
+
+
+
+# Test iteration:
+# new int[HLSIZE] = rand();
+# for(HLSIZE) Add();
+# for(HLSIZE) Get();
+# for(HLSIZE) Del();

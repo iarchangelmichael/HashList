@@ -11,6 +11,7 @@
 #define HLTYPE_STD	3
 #define HLTYPE_STDU	4
 #define HLTYPE_HT	5
+#define HLTYPE_HLS	6
 
 #ifndef HLSIZE
 	#define HLSIZE (1024 * 1024)
@@ -42,6 +43,10 @@
 	const char* hlname = "HashTree";
 #endif
 
+#if HLTYPE == HLTYPE_HLS
+	const char* hlname = "HashListSix";
+#endif
+
 
 #ifndef HLTYPE
 	#define HLSTOP
@@ -62,6 +67,9 @@
 
 // Hash List Five class
 #include "HashListFive.h"
+
+// Hash List Six class
+#include "HashListSix.h"
 
 // Hash Tree class
 #include "HashTree.h"

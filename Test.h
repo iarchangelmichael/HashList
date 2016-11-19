@@ -83,10 +83,14 @@ using namespace std;
 class HashTestStructTime{
 public:
 	// All time, count, maximum, minimum, avg
-	int all, cnt, max, min, avg;
+	int all, cnt, max, avg, min;
 
 	HashTestStructTime(){
-		memset(this, 0, sizeof(this));
+		//memset(this, 0, sizeof(this));
+		all = 0;
+		cnt = 0;
+		max = 0;
+		avg = 0;
 		min = 999999999;
 	}
 
@@ -152,6 +156,10 @@ int HashTestIntOne(HashTestStruct &hts){
 
 	#if HLTYPE == HLTYPE_HT
 		HashTree<HashTreeIntTest> list;
+	#endif
+
+	#if HLTYPE == HLTYPE_HLS
+		HashListSix<HashTreeIntTest> list;
 	#endif
 	//HashListIntTest *p;
 #else
