@@ -103,9 +103,9 @@ int HashTestIntOne(HashTestStruct &hts);
 
 int HashTestInt(HashTestStruct &hts){
 #ifdef HASHTESTSTD
-	const char *stdact = "(Std Active!)";
+	const char *stdact = "(unordered_map)";
 #else
-	const char *stdact = "";
+	const char *stdact = "(HashList)";
 #endif
 
 	printf("Run Hash Test%s. int[%d] * %d iterations.\r\n", stdact, hts.asz, hts.its);

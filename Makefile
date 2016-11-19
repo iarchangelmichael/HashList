@@ -4,13 +4,18 @@ RM=rm -f
 SOURCE=HashList.cpp
 CXXFLAGS= -std=c++11
 
-all: hash
+all:
+echo "Use: make [hash | std]"
+echo "hash - for use HashList"
+echo "std - for use std::unordered_map"
 
-std: hash
-		CXXFLAGS+= -DHASHTESTSTD=1
+hash: build
 
-hash: $(SOURCE)
-		$(CXX) $(SOURCE) $(CXXFLAGS) -o hashlist
+std: build
+CXXFLAGS+= -DHASHTESTSTD=1
+
+build: $(SOURCE)
+	$(CXX) $(SOURCE) $(CXXFLAGS) -o hashlist
 
 clean:
-		rm ./hashlist
+	rm ./hashlist

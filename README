@@ -1,0 +1,12 @@
+This is Hash List project.
+Develop & Testing (+std)
+
+# Make HashList
+make
+
+# Make std::unordered_map
+make std
+
+
+# Run:
+./hashlist
