@@ -89,7 +89,7 @@ public:
 		HashListEl *el = nodes[crc]._a;
 		while(el){
 			if(pel.TestHash(el, key)){
-				OMatrixT<HashListEl>::OMDelP(nodes[crc]._a, nodes[crc]._e, el);
+				OMatrixTemplateDel(nodes[crc]._a, nodes[crc]._e, el);
 				elements.AllocFree(el);
 
 				esz --;
