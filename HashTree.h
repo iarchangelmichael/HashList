@@ -81,7 +81,7 @@ public:
 
 	}
 
-	template<class HashTreeEl, class AllocHashTree>
+	template<class HashTreeEl_noerror, class AllocHashTree>
 	friend class HashTree;
 };
 
