@@ -192,12 +192,10 @@ int HashTestIntOne(HashTestStruct &hts){
 	for(int i = 0; i < hts.asz; i ++){
 #ifndef HLUSESTD
 		if(!list.Add(arr[i], rnd))
-			
+			printf("Insert FAIL! ");			
 #else
-		if(!list.insert(pair<char,int>(arr[i], rnd))
+		list.insert(pair<char,int>(arr[i], rnd));
 #endif
-		printf("Insert FAIL! ");
-
 		rnd += i;
 	}
 	tetime;
@@ -212,7 +210,7 @@ int HashTestIntOne(HashTestStruct &hts){
 		if(!list.Get(arr[i]))
 			
 #else
-		if(!list.find(arr[i]))
+		if(!list.find(arr[i])->first)
 #endif
 			printf("Find FAIL! ");
 	}
@@ -226,11 +224,11 @@ int HashTestIntOne(HashTestStruct &hts){
 	for(int i = 0; i < hts.asz; i ++){
 #ifndef HLUSESTD
 		if(!list.Del(arr[i]))
-			
+			printf("Del FAIL! ");			
 #else
-		if(!list.erase(arr[i]))
+		list.erase(arr[i]);
 #endif
-			printf("Del FAIL! ");
+			
 	}
 	tetime;
 	hts.tdel.Add(tbtime_result);
