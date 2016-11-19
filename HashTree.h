@@ -4,6 +4,11 @@
 
 #define HASHTREE_MAXSIZE	128
 
+
+template<class HashTreeEl, class AllocHashTree = AListAllocDef<HashTreeEl> >
+class HashTree;
+
+
 template<class HashTreeEl>
 class HashTreeElProto{
 public:
@@ -30,14 +35,6 @@ public:
 
 };
 
-
-template<class HashTreeEl>
-class HashTreeEl: public HashTreeEl{
-
-
-
-
-};
 
 template<class HashTreeEl>
 class HashTreeNode{
@@ -86,15 +83,10 @@ public:
 
 	template<class HashTreeEl, class AllocHashTree>
 	friend class HashTree;
-
-	template<class HashTreeNode>
-	friend class OMatrixT;
 };
 
 
-
-
-template<class HashTreeEl, class AllocHashTree = AListAllocDef<HashTreeEl>>
+template<class HashTreeEl, class AllocHashTree>
 class HashTree{
 private:
 	// Nodes Alloc
@@ -536,7 +528,7 @@ private:
 public:
 
 	int Size(){
-		return asz; 
+		return esz; 
 	}
 
 	void Clear(){
@@ -571,6 +563,6 @@ public:
 		Clear();
 	}
 
-	friend class OMatrixT<HashTreeNode<HashTreeEl>>;
+	//friend class OMatrixT<HashTreeNode<HashTreeEl> >;
 
 };
