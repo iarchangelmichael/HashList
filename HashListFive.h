@@ -62,34 +62,28 @@ public:
 			nodes = nnodes;
 		}
 
-
 		// Get Crc
 		unsigned int crc = pel.GetHash(key);
 
 		// Find
 		HashListNode *f = nodes, *to = nodes + esz, *p = f;
-		int sz = esz;
+		int sz = esz, s;
 
-		while(sz > 1){
-			p = f + sz / 2;
-			
-			if(p->crc < crc)
-				f = p;
-			else if(p->crc > crc)
-				to = p;
-			else{
-				f = p;
-				break;
+		while(sz){
+			p = f;
+			s = sz / 2;
+			p += s;
+
+			if(p->crc < crc){
+				f = ++p; 
+				sz -= s + 1;
 			}
-
-			sz = to - f;
+			else
+				sz = s;
 		}
 
-		if(sz && f->crc < crc)
-			f ++;
-
-		if(f < to && f->crc < crc || f > nodes && f[-1].crc > crc)
-			int err = 1;
+//		if(f < to && f->crc < crc || f > nodes && f[-1].crc > crc)
+//			int err = 1;
 
 		// Add
 		HashListEl *nel = elements.AllocNew();
@@ -103,7 +97,7 @@ public:
 
 		esz ++;
 
-		Test();
+		//Test();
 
 		return nel;
 	}
@@ -132,24 +126,23 @@ public:
 
 		// Find
 		HashListNode *f = nodes, *to = nodes + esz, *p = 0;
-		int sz = esz;
+		int sz = esz, s;
 
-		while(sz > 1){
-			p = f + sz / 2;
-			
-			if(p->crc < crc)
-				f = p;
-			else if(p->crc > crc)
-				to = p;
-			else{
-				f = p;
-				while(f > nodes && f[-1].crc == crc)
-					f --;
-				break;
+		while(sz){
+			p = f;
+			s = sz / 2;
+			p += s;
+
+			if(p->crc < crc){
+				f = ++p; 
+				sz -= s + 1; 
 			}
-
-			sz = to - f;
+			else
+				sz = s;
 		}
+
+//		while(f > nodes && f[-1].crc == crc)
+//			f --;
 
 		while(f->crc == crc && f < to){
 			if(pel.TestHash(f->el, key))
@@ -170,24 +163,23 @@ public:
 
 		// Find
 		HashListNode *f = nodes, *to = nodes + esz, *p = 0;
-		int sz = esz;
+		int sz = esz, s;
 
-		while(sz > 1){
-			p = f + sz / 2;
-			
-			if(p->crc < crc)
-				f = p;
-			else if(p->crc > crc)
-				to = p;
-			else{
-				f = p;
-				while(f > nodes && f[-1].crc == crc)
-					f --;
-				break;
+		while(sz){
+			p = f;
+			s = sz / 2;
+			p += s;
+
+			if(p->crc < crc){
+				f = ++p; 
+				sz -= s + 1; 
 			}
-
-			sz = to - f;
+			else
+				sz = s;
 		}
+
+//		while(f > nodes && f[-1].crc == crc)
+//			f --;
 
 		while(f->crc == crc && f < to){
 			if(pel.TestHash(f->el, key)){

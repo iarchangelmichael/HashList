@@ -19,6 +19,9 @@ std: build
 stdu: CXXFLAGS+= -DHLTYPE=4
 stdu: build
 
+ht: CXXFLAGS+= -DHLTYPE=5
+ht: build
+
 build: $(SOURCE)
 	$(CXX) $(SOURCE) $(CXXFLAGS) -o hashlist
 

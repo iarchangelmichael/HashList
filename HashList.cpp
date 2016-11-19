@@ -10,6 +10,7 @@
 #define HLTYPE_HLF	2
 #define HLTYPE_STD	3
 #define HLTYPE_STDU	4
+#define HLTYPE_HT	5
 
 #ifndef HLSIZE
 	#define HLSIZE (1024 * 1024)
@@ -37,6 +38,10 @@
 	const char* hlname = "std::unordered_map";
 #endif
 
+#if HLTYPE == HLTYPE_HT
+	const char* hlname = "HashTree";
+#endif
+
 
 #ifndef HLTYPE
 	#define HLSTOP
@@ -57,6 +62,9 @@
 
 // Hash List Five class
 #include "HashListFive.h"
+
+// Hash Tree class
+#include "HashTree.h"
 
 // Testing
 #include "Test.h"

@@ -47,6 +47,30 @@ public:
 
 };
 
+class HashTreeIntTest : public HashTreeElProto<HashTreeIntTest>{
+	unsigned int key;
+	unsigned int val;
+
+public:
+	void SetItem(unsigned int k, unsigned int v){
+		key = k;
+		val = v;
+	}
+
+	unsigned int GetHash(){
+		return key;
+	}
+
+	unsigned int GetHash(unsigned int &key){
+		return key;
+	}
+
+	bool TestHash(HashTreeIntTest *el, unsigned int &key){
+		return el->key == key;
+	}
+
+};
+
 
 
 #include <iostream>
@@ -124,7 +148,11 @@ int HashTestIntOne(HashTestStruct &hts){
 
 	#if HLTYPE == HLTYPE_HLF
 		HashListFive<HashListIntTest> list;
-	#endif	
+	#endif
+
+	#if HLTYPE == HLTYPE_HT
+		HashTree<HashTreeIntTest> list;
+	#endif
 	//HashListIntTest *p;
 #else
 	#if HLTYPE == HLTYPE_STD

@@ -6,6 +6,7 @@ make type
 
 hl - HashList
 hlf - HashListFive
+ht - HashTree
 std - std::map
 stdu - std::unordered_map
 

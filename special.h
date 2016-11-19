@@ -30,11 +30,22 @@ unsigned int crc32(unsigned char *buf, unsigned long len){
 	return crc ^ 0xFFFFFFFFUL;
 }
 
-#define OMatrixTemplateAdd(_a, _e, el) \
-	if(!_a){ _a=el; _e=el; el->_p=0; el->_n=0; } \
+#define OMatrixTemplateAdd(_a, _e, el)				\
+	if(!_a){ _a=el; _e=el; el->_p=0; el->_n=0; }	\
 	else {	el->_n=0; el->_p=_e; _e->_n=el; _e=el; }
 
-#define OMatrixTemplateDel(_a, _e, el) \
-	if(el->_n) el->_n->_p=el->_p; else if(el==_e) _e=el->_p; \
+#define OMatrixTemplateAddP(_a, _e, p, el)				\
+	if(!_a){ _a=el; _e=el; el->_p=0; el->_n=0; }		\
+	else if(!p){										\
+		el->_p=0; el->_n=_a; _a->_p=el; _a=el;			\
+	} else {											\
+		el->_p=p; el->_n=p->_n;							\
+		p->_n=el; if(el->_n) el->_n->_p=el; else _e=el;	\
+	}
+
+
+
+#define OMatrixTemplateDel(_a, _e, el)							\
+	if(el->_n) el->_n->_p=el->_p; else if(el==_e) _e=el->_p;	\
 	if(el->_p) el->_p->_n=el->_n; else if(el==_a) _a=el->_n;
 
