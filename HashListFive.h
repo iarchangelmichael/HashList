@@ -1,3 +1,14 @@
+// Idea:
+// Data: Vector sorted.
+// Add: Find position for GetHash() && memcpy(vector[pos + 1], vector[pos], sz - pos - 1 );
+// Get: Find position for GetHash()
+// Del: Find position for GetHash() && memcpy(vector[pos - 1], vector[pos], sz - pos);
+
+// Comment: hardcore insert!
+
+// Ps:
+// Game Five: fast find random number = rand() % 100. 
+
 template<class HashListEl, class AllocHashList = AListAllocDef<HashListEl> >
 class HashListFive{
 private:
@@ -11,16 +22,14 @@ private:
 	// Node Size
 	unsigned int nsz;
 
-	// Node Used
-	unsigned int usz;
-
 	// Elements Size
 	unsigned int esz;
 
 	// Node
 	class HashListNode{
 	public:
-		HashListEl *_a, *_e;
+		unsigned int crc;
+		HashListEl *el; //, *_e;
 	};
 
 	HashListNode *nodes;
@@ -29,10 +38,7 @@ public:
 	HashListFive(){
 		nodes = 0;
 		nsz = 0;
-		usz = 0;
 		esz = 0;
-
-		UpdateNodes();
 	}
 
 	~HashListFive(){
@@ -41,19 +47,79 @@ public:
 
 	template<typename TypeKey, typename TypeVal>
 	HashListEl* Add(TypeKey &key, TypeVal &val){
-		UpdateNodes();
+		//UpdateNodes();
+
+		// Resize
+		if(esz >= nsz){
+			int nusz = nsz ? nsz << 1 : 128;
+			HashListNode *nnodes = (HashListNode*) malloc(nusz * sizeof(HashListNode));
+
+			memcpy(nnodes, nodes, nsz * sizeof(HashListNode));
+
+			free(nodes);
+
+			nsz = nusz;
+			nodes = nnodes;
+		}
+
 
 		// Get Crc
-		unsigned int crc = pel.GetHash(key) % nsz;
+		unsigned int crc = pel.GetHash(key);
+
+		// Find
+		HashListNode *f = nodes, *to = nodes + esz, *p = f;
+		int sz = esz;
+
+		while(sz > 1){
+			p = f + sz / 2;
+			
+			if(p->crc < crc)
+				f = p;
+			else if(p->crc > crc)
+				to = p;
+			else{
+				f = p;
+				break;
+			}
+
+			sz = to - f;
+		}
+
+		if(f->crc < crc)
+			f ++;
+
+		if(f < to && f->crc < crc || f > nodes && f[-1].crc > crc)
+			int err = 1;
 
 		// Add
 		HashListEl *nel = elements.AllocNew();
-		OMatrixTemplateAdd(nodes[crc]._a, nodes[crc]._e, nel);
-
 		nel->SetItem(key, val);
+
+		if(f != nodes + esz)
+			memcpy(f + 1, f, (esz - (f - nodes)) * sizeof(HashListNode));
+		
+		f->el = nel;
+		f->crc = crc;
+
 		esz ++;
 
+		Test();
+
 		return nel;
+	}
+
+	void Test(){
+		HashListNode *f = nodes, *to = nodes + esz;
+
+		while(f < to){
+			if(f + 1 != to)
+				if(f->crc > f[1].crc)
+					int err = 1;
+
+			f ++;
+		}
+
+		return ;
 	}
 
 	template<typename TypeKey>
@@ -64,14 +130,31 @@ public:
 		// Get Crc
 		unsigned int crc = pel.GetHash(key);
 
-
-
 		// Find
-		HashListEl *el = nodes[crc]._a;
-		while(el){
-			if(pel.TestHash(el, key))
-				return el;
-			el = el->_n;
+		HashListNode *f = nodes, *to = nodes + esz, *p = 0;
+		int sz = esz;
+
+		while(sz > 1){
+			p = f + sz / 2;
+			
+			if(p->crc < crc)
+				f = p;
+			else if(p->crc > crc)
+				to = p;
+			else{
+				f = p;
+				while(f > nodes && f[-1].crc == crc)
+					f --;
+				break;
+			}
+
+			sz = to - f;
+		}
+
+		while(f->crc == crc && f < to){
+			if(pel.TestHash(f->el, key))
+				return f->el;
+			f ++;
 		}
 
 		return 0;
@@ -83,70 +166,54 @@ public:
 			return 0;
 
 		// Get Crc
-		unsigned int crc = pel.GetHash(key) % nsz;
+		unsigned int crc = pel.GetHash(key);
 
 		// Find
-		HashListEl *el = nodes[crc]._a;
-		while(el){
-			if(pel.TestHash(el, key)){
-				OMatrixTemplateDel(nodes[crc]._a, nodes[crc]._e, el);
-				elements.AllocFree(el);
+		HashListNode *f = nodes, *to = nodes + esz, *p = 0;
+		int sz = esz;
 
-				esz --;
+		while(sz > 1){
+			p = f + sz / 2;
+			
+			if(p->crc < crc)
+				f = p;
+			else if(p->crc > crc)
+				to = p;
+			else{
+				f = p;
+				while(f > nodes && f[-1].crc == crc)
+					f --;
+				break;
+			}
+
+			sz = to - f;
+		}
+
+		while(f->crc == crc && f < to){
+			if(pel.TestHash(f->el, key)){
+				elements.AllocFree(f->el);
+				memcpy(f, f + 1, (nsz - (f - nodes) - 1) * sizeof(HashListNode));
+				esz --;				
 				return 1;
 			}
-			el = el->_n;
+			f ++;
 		}
 
 		return 0;
 	}
 
-	void UpdateNodes(){
-		if(esz / 2 < nsz)
-			return ;
-
-		unsigned int newsz = !nsz ? 128 : nsz << 1;
-
-		HashListNode *newnodes = (HashListNode*) malloc(newsz * sizeof(HashListNode));
-
-		memset(newnodes, 0, newsz * sizeof(HashListNode));
-
-		// Migrate
-		for(unsigned int i = 0; i < nsz; i ++){
-			HashListEl *el = nodes[i]._a, *del;
-			while(el){
-				del = el;
-				el = el->_n;
-
-				unsigned int crc = del->GetHash();
-				crc %= newsz;
-				OMatrixTemplateAdd(newnodes[crc]._a, newnodes[crc]._e, del);						
-			}
-		}
-
-		// Free
-		free(nodes);
-		nodes = newnodes;
-		nsz = newsz;
-	}
-
 	void Clear(){
-		for(unsigned int i = 0; i < nsz; i ++){
-			HashListEl *el = nodes[i]._a, *del;
-			while(el){
-				del = el;
-				el = el->_n;
-
-				elements.AllocFree(del);
-
-				esz --;				
-			}
+		HashListNode *f = nodes, *to = nodes + esz;
+		while(f < to){
+			elements.AllocFree(f->el);
+			f ++;
 		}
 
 		free(nodes);
+
 		nodes = 0;
-		nsz = 0;
 		esz = 0;
+		nsz = 0;
 
 		return ;
 	}

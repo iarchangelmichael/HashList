@@ -1,3 +1,9 @@
+// Idea:
+// Data: vector[nsz] + Elements: dynamic
+// Add: vector[GetHash() % nsz] -> insert
+// Get: vector[GetHash() % nsz] -> while{ el.TestHash() or next }
+// Del: vector[GetHash() % nsz] -> while{ el.TestHash() && delete or next }
+
 template<class HashListEl>
 class HashListElProto{
 public:

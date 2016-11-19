@@ -102,18 +102,12 @@ public:
 int HashTestIntOne(HashTestStruct &hts);
 
 int HashTestInt(HashTestStruct &hts){
-#ifdef HASHTESTSTD
-	const char *stdact = "(unordered_map)";
-#else
-	const char *stdact = "(HashList)";
-#endif
-
-	printf("Run Hash Test%s. int[%d] * %d iterations.\r\n", stdact, hts.asz, hts.its);
+	printf("Run Hash Test(%s). int[%d] * %d iterations.\r\n", hlname, hts.asz, hts.its);
 
 	for(int i = 0; i < hts.its; i ++)
 		HashTestIntOne(hts);
 
-	printf("Result Hash Test%s. Data: int[%d] * %d iterations.\r\n", stdact, hts.asz, hts.its);
+	printf("Result Hash Test(%s). Data: int[%d] * %d iterations.\r\n", hlname, hts.asz, hts.its);
 	printf("Action: max / avg / min ms\r\n", hts.tadd.max, hts.tadd.avg, hts.tadd.min);
 	printf("Insert: %d / %d / %d ms\r\n", hts.tadd.max, hts.tadd.avg, hts.tadd.min);
 	printf("Find: %d / %d / %d ms\r\n", hts.tget.max, hts.tget.avg, hts.tget.min);
@@ -123,11 +117,23 @@ int HashTestInt(HashTestStruct &hts){
 }
 
 int HashTestIntOne(HashTestStruct &hts){
-#ifndef HASHTESTSTD
-	HashList<HashListIntTest> list;
+#ifndef HLUSESTD
+	#if HLTYPE == HLTYPE_HL
+		HashList<HashListIntTest> list;
+	#endif
+
+	#if HLTYPE == HLTYPE_HLF
+		HashListFive<HashListIntTest> list;
+	#endif	
 	//HashListIntTest *p;
 #else
-	unordered_map <int, int> list;
+	#if HLTYPE == HLTYPE_STD
+		map <int, int> list;
+	#endif
+
+	#if HLTYPE == HLTYPE_STDU
+		unordered_map <int, int> list;
+	#endif	
 #endif
 
 	srand((unsigned int)time(0));
@@ -148,7 +154,7 @@ int HashTestIntOne(HashTestStruct &hts){
 	printf("Test: Insert...");
 	tbtime;
 	for(int i = 0; i < hts.asz; i ++){
-#ifndef HASHTESTSTD
+#ifndef HLUSESTD
 		if(!list.Add(arr[i], rnd))
 			printf("Insert FAIL! ");
 #else
@@ -165,7 +171,7 @@ int HashTestIntOne(HashTestStruct &hts){
 	printf("Test: Find...");
 	tctime;
 	for(int i = 0; i < hts.asz; i ++){
-#ifndef HASHTESTSTD
+#ifndef HLUSESTD
 		if(!list.Get(arr[i]))
 			printf("Find FAIL! ");
 #else
@@ -182,7 +188,7 @@ int HashTestIntOne(HashTestStruct &hts){
 	printf("Test: Del...");
 	tctime;
 	for(int i = 0; i < hts.asz; i ++){
-#ifndef HASHTESTSTD
+#ifndef HLUSESTD
 		if(!list.Del(arr[i]))
 			printf("Del FAIL! ");
 #else

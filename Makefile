@@ -5,14 +5,19 @@ SOURCE=HashList.cpp
 CXXFLAGS= -std=c++11
 
 all:
-echo "Use: make [hash | std]"
-echo "hash - for use HashList"
-echo "std - for use std::unordered_map"
+echo "Use: make [hl | hlf | std | stdu]"
 
-hash: build
+hl: CXXFLAGS+= -DHLTYPE=1
+hl: build
 
+hlf: CXXFLAGS+= -DHLTYPE=2
+hlf: build
+
+std: CXXFLAGS+= -DHLTYPE=3
 std: build
-CXXFLAGS+= -DHASHTESTSTD=1
+
+stdu: CXXFLAGS+= -DHLTYPE=4
+stdu: build
 
 build: $(SOURCE)
 	$(CXX) $(SOURCE) $(CXXFLAGS) -o hashlist

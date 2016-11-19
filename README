@@ -1,12 +1,13 @@
 This is Hash List project.
 Develop & Testing (+std)
 
-# Make HashList
-make
+# Make
+make type
 
-# Make std::unordered_map
-make std
-
+hl - HashList
+hlf - HashListFive
+std - std::map
+stdu - std::unordered_map
 
 # Run:
 ./hashlist
