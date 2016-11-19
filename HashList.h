@@ -23,7 +23,7 @@ public:
 
 };
 
-template<class HashListEl, class AllocHashList = AListAllocDef<HashListEl>>
+template<class HashListEl, class AllocHashList = AListAllocDef<HashListEl> >
 class HashList{
 private:
 
