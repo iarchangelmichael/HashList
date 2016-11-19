@@ -1,14 +1,14 @@
 // Idea:
-// Data: Vector[S64K] -> Vector sorted.
-// Add: Find position for GetHash() && memcpy(vector[pos + 1], vector[pos], sz - pos - 1 );
-// Get: Find position for GetHash()
-// Del: Find position for GetHash() && memcpy(vector[pos - 1], vector[pos], sz - pos);
+// Data: Vector[HASHLS_GNS] -> Vector sorted.
+// Add: Vector[GetHash() % HASHLS_GNS] -> Find position for GetHash() && memcpy(vector[pos + 1], vector[pos], sz - pos - 1 );
+// Get: Vector[GetHash() % HASHLS_GNS] -> Find position for GetHash()
+// Del: Vector[GetHash() % HASHLS_GNS] -> Find position for GetHash() && memcpy(vector[pos - 1], vector[pos], sz - pos);
 
 
 // Ps:
 // Modified five(Five + 1).
 
-#define HASHLS_GNS	256
+#define HASHLS_GNS	16384
 
 template<class HashListEl, class AllocHashList = AListAllocDef<HashListEl> >
 class HashListSix{
