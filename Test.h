@@ -307,7 +307,7 @@ int HashTestAllocate(HashTestStruct &hts){
 	printf("\r\n");
 	hts.asz *= 64;
 
-	inf = "[Def] ";
+	inf = (char*)"[Def] ";
 
 	//printf("Result Hash Test(%s). Data: int[%d] * %d iterations.\r\n", hlname, hts.asz, hts.its);
 	//printf("Action: max / avg / min ms\r\n", hts.tadd.max, hts.tadd.avg, hts.tadd.min);
@@ -325,7 +325,7 @@ int HashTestAllocate(HashTestStruct &hts){
 	}
 	printf("\r\n");
 
-	inf = "[UList] ";
+	inf = (char*)"[UList] ";
 	printf("%sInsert: %d / %d / %d ms\r\n", inf, hts.tadd.max, hts.tadd.avg, hts.tadd.min);
 	printf("%sDel: %d / %d / %d ms\r\n", inf, hts.tdel.max, hts.tdel.avg, hts.tdel.min);
 
@@ -338,7 +338,7 @@ int HashTestAllocate(HashTestStruct &hts){
 	}
 	printf("\r\n");
 
-	inf = "[OList] ";
+	inf = (char*)"[OList] ";
 	printf("%sInsert: %d / %d / %d ms\r\n", inf, hts.tadd.max, hts.tadd.avg, hts.tadd.min);
 	printf("%sDel: %d / %d / %d ms\r\n", inf, hts.tdel.max, hts.tdel.avg, hts.tdel.min);
 
