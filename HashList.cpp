@@ -13,6 +13,8 @@
 #define HLTYPE_HT	5
 #define HLTYPE_HLS	6
 
+#define HLTYPE_AT	100
+
 #ifndef HLSIZE
 	#define HLSIZE (1024 * 1024)
 #endif
@@ -48,6 +50,11 @@
 #endif
 
 
+#if HLTYPE == HLTYPE_AT
+	const char* hlname = "Allocate test";
+#endif
+
+
 #ifndef HLTYPE
 	#define HLSTOP
 	#define HLTYPE HLTYPE_HL
@@ -78,6 +85,10 @@
 #include "Test.h"
 
 
+	class III{
+		int a, b;
+	};
+
 int main(){
 	printf("Hash List project. Build: %s\r\n", hlname);
 
@@ -86,10 +97,17 @@ int main(){
 	return 0;
 #endif
 
+
 	HashTestStruct hts;
 
 	hts.asz = HLSIZE;
 	hts.its = HLITS;
+
+
+#if HLTYPE == HLTYPE_AT
+	HashTestAllocate(hts);
+	return 0;
+#endif
 
 	HashTestInt(hts);
 

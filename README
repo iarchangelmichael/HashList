@@ -10,6 +10,7 @@ hls - HashListSix
 ht - HashTree
 std - std::map
 stdu - std::unordered_map
+mem - memory tests for AListAllocDef/64, AListAllocUList, AListAllocOList.
 
 # Options
 make HLFLAGS='-DHLSIZE=65535 -DHLITS=16' hl
@@ -27,3 +28,8 @@ HLITS - iterations.
 # for(HLSIZE) Add();
 # for(HLSIZE) Get();
 # for(HLSIZE) Del();
+
+# Memory test iteration:
+# new void*[HLSIZE];
+# for(HLSIZE) Alloc();
+# for(HLSIZE) Free();

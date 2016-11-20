@@ -87,11 +87,7 @@ public:
 
 	HashTestStructTime(){
 		//memset(this, 0, sizeof(this));
-		all = 0;
-		cnt = 0;
-		max = 0;
-		avg = 0;
-		min = 999999999;
+		Clear();
 	}
 
 	void Add(int tm){
@@ -104,6 +100,14 @@ public:
 		all += tm;
 		cnt ++;
 		avg = all / cnt;
+	}
+
+	void Clear(){
+		all = 0;
+		cnt = 0;
+		max = 0;
+		avg = 0;
+		min = 999999999;
 	}
 
 };
@@ -122,6 +126,12 @@ public:
 	HashTestStruct(){
 		asz = 1024 * 1024;
 		its = 128;
+	}
+
+	void ClearTime(){
+		tadd.Clear();
+		tget.Clear();
+		tdel.Clear();
 	}
 
 };
@@ -162,6 +172,11 @@ int HashTestIntOne(HashTestStruct &hts){
 		HashListSix<HashTreeIntTest> list;
 	#endif
 	//HashListIntTest *p;
+
+	#if HLTYPE == HLTYPE_AT // Disable error
+		HashList<HashListIntTest> list;
+	#endif
+
 #else
 	#if HLTYPE == HLTYPE_STD
 		map <int, int> list;
@@ -235,6 +250,97 @@ int HashTestIntOne(HashTestStruct &hts){
 	printf("%d ms.\r\n", tbtime_result);
 
 	free(arr);
+
+	return 0;
+}
+
+
+
+class HashTestTwoInt{
+public:
+	int a, b;
+
+};
+
+template<class AllocClass>
+int HashTestAllocateOne(HashTestStruct &hts){
+	AllocClass list;
+
+	HashTestTwoInt **arr = (HashTestTwoInt**) malloc(hts.asz * sizeof(void*));
+	
+	tbtime;
+	for(int i = 0; i < hts.asz; i ++){
+		arr[i] = list.AllocNew();
+	}
+	tetime;
+
+	hts.tadd.Add(tbtime_result);
+
+	tctime;
+	for(int i = 0; i < hts.asz; i ++){
+		list.AllocFree(arr[i]);
+	}
+	tetime;
+
+	hts.tdel.Add(tbtime_result);	
+	
+	free(arr);
+
+	return 0;
+}
+
+
+int HashTestAllocate(HashTestStruct &hts){
+	char *inf;
+
+	printf("Run Allocate Test. int[%d] * %d iterations.\r\n", hts.asz, hts.its);
+
+
+	// Def
+	hts.ClearTime();
+	hts.asz /= 64;
+
+	for(int i = 0; i < hts.its; i ++){
+		HashTestAllocateOne<AListAllocDef<HashTestTwoInt>>(hts);
+		printf(".");
+	}
+	printf("\r\n");
+	hts.asz *= 64;
+
+	inf = "[Def] ";
+
+	//printf("Result Hash Test(%s). Data: int[%d] * %d iterations.\r\n", hlname, hts.asz, hts.its);
+	//printf("Action: max / avg / min ms\r\n", hts.tadd.max, hts.tadd.avg, hts.tadd.min);
+	printf("%sInsert: %d / %d / %d ms\r\n", inf, hts.tadd.max, hts.tadd.avg, hts.tadd.min);
+	//printf("Find: %d / %d / %d ms\r\n", hts.tget.max, hts.tget.avg, hts.tget.min);
+	printf("%sDel: %d / %d / %d ms\r\n", inf, hts.tdel.max, hts.tdel.avg, hts.tdel.min);
+	
+
+	// UList
+	hts.ClearTime();
+
+	for(int i = 0; i < hts.its; i ++){
+		HashTestAllocateOne<AListAllocUList<HashTestTwoInt>>(hts);
+		printf(".");
+	}
+	printf("\r\n");
+
+	inf = "[UList] ";
+	printf("%sInsert: %d / %d / %d ms\r\n", inf, hts.tadd.max, hts.tadd.avg, hts.tadd.min);
+	printf("%sDel: %d / %d / %d ms\r\n", inf, hts.tdel.max, hts.tdel.avg, hts.tdel.min);
+
+	// OList
+	hts.ClearTime();
+
+	for(int i = 0; i < hts.its; i ++){
+		HashTestAllocateOne<AListAllocOList<HashTestTwoInt>>(hts);
+		printf(".");
+	}
+	printf("\r\n");
+
+	inf = "[OList] ";
+	printf("%sInsert: %d / %d / %d ms\r\n", inf, hts.tadd.max, hts.tadd.avg, hts.tadd.min);
+	printf("%sDel: %d / %d / %d ms\r\n", inf, hts.tdel.max, hts.tdel.avg, hts.tdel.min);
 
 	return 0;
 }

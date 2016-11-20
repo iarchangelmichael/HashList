@@ -25,6 +25,9 @@ ht: build
 hls: CXXFLAGS+= -DHLTYPE=6
 hls: build
 
+mem: CXXFLAGS+= -DHLTYPE=100
+mem: build
+
 build: $(SOURCE)
 	$(CXX) $(SOURCE) $(CXXFLAGS) -o hashlist
 
